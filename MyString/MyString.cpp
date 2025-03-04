@@ -4,8 +4,8 @@
 // 私有辅助函数
 void MyString::resize(size_t new_capacity) {
 // 实现重新分配内存的逻辑
-    // 新容量小于当前空间大小，直接返回
-    if (new_capacity <= size_) {
+    // 新容量小于当前已经使用的空间大小，直接返回
+    if (new_capacity < size_ + 1) {
         return;
     }
     // 分配新内存
@@ -48,11 +48,27 @@ MyString::~MyString() {
 // 赋值运算符
 MyString& MyString::operator=(const MyString& other) {
     // 实现拷贝赋值运算符
+    if (this != &other) {
+        if (capacity_ < other.size_) {
+            resize(other.size_ + 1);
+            strcpy(data_, other.data_);
+            size_ = other.size_;
+        }
+    }
     return *this;
 }
 
 MyString& MyString::operator=(MyString&& other) {
     // 实现移动赋值运算符
+    if (this != &other) {
+        delete[] data_;
+        data_ = other.data_;
+        size_ = other.size_;
+        capacity_ = other.capacity_;
+        other.data_ = nullptr;
+        other.size_ = 0;
+        other.capacity_ = 0;
+    }
     return *this;
 }
 
@@ -70,6 +86,7 @@ const char& MyString::operator[](size_t index) const {
 // 修改字符串
 void MyString::append(const char* str) {
     // 实现追加C风格字符串
+
 }
 
 void MyString::append(const MyString& other) {
@@ -78,6 +95,9 @@ void MyString::append(const MyString& other) {
 
 MyString& MyString::operator+=(const char* str) {
     // 实现+=运算符(C风格字符串版本)
+    if (capacity_ < size_ + strlen(str)) {
+        resize(size_ + strlen(str) + 1);
+    }
     return *this;
 }
 
