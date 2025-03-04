@@ -1,0 +1,1 @@
+g++ main.cpp MyString.cpp -o main.exe
