@@ -1,4 +1,4 @@
-#include "myString.hpp"
+#include "MyString.hpp"
 #include <cstring>
 
 // 私有辅助函数
