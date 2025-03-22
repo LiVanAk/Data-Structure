@@ -1,3 +1,5 @@
+#ifndef HEAP_HPP
+#define HEAP_HPP
 #include <vector>
 
 /* 大顶堆 */
@@ -14,7 +16,7 @@ public:
         /* 将元素存入数组，即添加至堆底 */
         data.push_back(val);
         /* 修复从插入节点到根节点路径上的各个节点，即向上堆化 */
-        shiftUp(data.size()-1);
+        shiftUp(size()-1);
     }
 
     /* 元素出堆 */
@@ -64,14 +66,32 @@ private:
         /* 比较i节点与其父节点的值 */
         while (data[parent(i)] < data[i]) {
             /* 交换两个节点 */ 
-            swap(data[parent[i]], data[i]);
+            swap(data[parent(i)], data[i]);
             /* 更新节点索引 */
             i = parent(i);
         }
     }
 
     /* 从节点i开始，从顶至底执行堆化 */
-    void shiftDown(int i);
+    void shiftDown(int i) {
+        while (true) {
+            /* 找到节点i和其子节点中最大节点 */
+            int l = left(i), r = right(i), goal = i;
+            if (l < size() && data[l] > data[goal]) {
+                goal = l;
+            }
+            if (r < size() && data[r] > data[goal]) {
+                goal = r;
+            }
+            /* 若节点i最大，或索引l，r越界，则无需继续堆化，跳出循环 */
+            if (goal == i) {
+                break;
+            }
+            /* 否则交换元素，继续向下堆化 */
+            swap(data[i], data[goal]);
+            i = goal;
+        }
+    }
 
     /* 实现元素交换 */
     void swap(T& val1, T& val2) {
@@ -80,3 +100,5 @@ private:
         val2 = tmp;
     }
 };
+
+#endif
