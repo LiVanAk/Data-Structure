@@ -45,21 +45,21 @@ MyString::~MyString() {
     delete[] data_;
 }
 
-// 赋值运算符
+/* 赋值运算符 */
+// 实现拷贝赋值运算符
 MyString& MyString::operator=(const MyString& other) {
-    // 实现拷贝赋值运算符
     if (this != &other) {
-        if (capacity_ < other.size_) {
+        if (capacity_ <= other.size_) {
             resize(other.size_ + 1);
-            strcpy(data_, other.data_);
-            size_ = other.size_;
         }
+        strcpy(data_, other.data_);
+        size_ = other.size_;
     }
     return *this;
 }
 
+// 实现移动赋值运算符
 MyString& MyString::operator=(MyString&& other) {
-    // 实现移动赋值运算符
     if (this != &other) {
         delete[] data_;
         data_ = other.data_;
@@ -69,6 +69,13 @@ MyString& MyString::operator=(MyString&& other) {
         other.size_ = 0;
         other.capacity_ = 0;
     }
+    return *this;
+}
+// 从字符串拷贝
+MyString& MyString::operator=(const char*& str) {
+    resize(strlen(str) + 1);
+    size_ = strlen(str);
+    strcpy(data_, str);
     return *this;
 }
 
@@ -86,23 +93,37 @@ const char& MyString::operator[](size_t index) const {
 // 修改字符串
 void MyString::append(const char* str) {
     // 实现追加C风格字符串
-
+    if (capacity_ <= size_ + strlen(str)) {
+        resize(size_ + strlen(str) + 1);
+    }
+    strcat(data_, str);
+    size_ = size_ + strlen(str);
 }
 
 void MyString::append(const MyString& other) {
     // 实现追加MyString对象
+    if (capacity_ <= size_ + other.size()) {
+        resize(size_ + other.size() + 1);
+    }
+    strcat(data_, other.data_);
+    size_ = size_ + other.size();
 }
 
 MyString& MyString::operator+=(const char* str) {
     // 实现+=运算符(C风格字符串版本)
-    if (capacity_ < size_ + strlen(str)) {
+    if (capacity_ <= size_ + strlen(str)) {
         resize(size_ + strlen(str) + 1);
     }
+    strcat(data_, str);
     return *this;
 }
 
 MyString& MyString::operator+=(const MyString& other) {
     // 实现+=运算符(MyString版本)
+    if (capacity_ <= size_ + other.size()) {
+        resize(size_ + other.size() + 1);
+    }
+    strcat(data_, other.data_);
     return *this;
 }
 
@@ -127,7 +148,31 @@ bool MyString::operator>(const MyString& other) const {
     return false;
 }
 
-// 其他操作
+/* 流式运算符重载 */ 
+// 输出运算符重载（友元函数）
+std::ostream& operator<<(std::ostream& os, const MyString& str) {
+    // 输出字符串内容
+    os << str.data_;
+    // 返回ostream对象以支持链式调用
+    return os;
+}
+
+// 输入运算符重载（友元函数）
+std::istream& operator>>(std::istream& is, MyString& str) {
+    // 设置临时缓冲区
+    char temp[1024];
+    is >> temp;
+    // 释放原有内存
+    delete[] str.data_;
+    // 分配新的内存并复制
+    str.data_ = new char[strlen(temp) + 1];
+    strcpy(str.data_, temp);
+    // 返回istream对象以支持链式调用
+    return is;
+}
+
+
+/* 其他操作 */
 MyString MyString::substr(size_t pos, size_t len) const {
     // 实现子串获取
     return MyString();
