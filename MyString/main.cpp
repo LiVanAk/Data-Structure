@@ -23,6 +23,10 @@ int main() {
     else {
         std::cout << "<";
     }
-
+    std::cout << str2.size() << std::endl;
+    str2.clear();
+    std::cout << str2.size() << std::endl;
+    str1 = str3 + "Final";
+    std::cout << str1 << std::endl;
     return 0;
 }

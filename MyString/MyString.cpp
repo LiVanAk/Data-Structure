@@ -97,7 +97,7 @@ void MyString::append(const char* str) {
         resize(size_ + strlen(str) + 1);
     }
     strcat(data_, str);
-    size_ = size_ + strlen(str);
+    size_ = strlen(data_);
 }
 
 void MyString::append(const MyString& other) {
@@ -106,7 +106,7 @@ void MyString::append(const MyString& other) {
         resize(size_ + other.size() + 1);
     }
     strcat(data_, other.data_);
-    size_ = size_ + other.size();
+    size_ = strlen(data_);
 }
 
 MyString& MyString::operator+=(const char* str) {
@@ -115,6 +115,7 @@ MyString& MyString::operator+=(const char* str) {
         resize(size_ + strlen(str) + 1);
     }
     strcat(data_, str);
+    size_ = strlen(data_);
     return *this;
 }
 
@@ -124,6 +125,7 @@ MyString& MyString::operator+=(const MyString& other) {
         resize(size_ + other.size() + 1);
     }
     strcat(data_, other.data_);
+    size_ = strlen(data_);
     return *this;
 }
 
@@ -163,48 +165,40 @@ std::istream& operator>>(std::istream& is, MyString& str) {
     delete[] str.data_;
     // 分配新的内存并复制
     str.data_ = new char[strlen(temp) + 1];
+    str.size_ = strlen(temp);
+    str.capacity_ = strlen(temp) + 1;
     strcpy(str.data_, temp);
     // 返回istream对象以支持链式调用
     return is;
 }
 
-
-/* 其他操作 */
-MyString MyString::substr(size_t pos, size_t len) const {
-    // 实现子串获取
-    return MyString();
-}
-
-size_t MyString::find(char ch) const {
-    // 实现查找字符
-    return 0;
-}
-
-size_t MyString::find(const MyString& other) const {
-    // 实现查找字符串
-    return 0;
-}
-
-void MyString::swap(MyString& other) {
-    // 实现交换
-}
-
+// 实现清空字符串
 void MyString::clear() {
-    // 实现清空字符串
+    delete[] data_;
+    size_ = 0;
+    capacity_ = 1;
+    data_ = new char[1];
+    data_[0] = '\0';
 }
 
 // 非成员函数
 MyString operator+(const MyString& lhs, const MyString& rhs) {
     // 实现+运算符(MyString + MyString)
-    return MyString();
+    MyString rv(lhs);
+    rv.append(rhs);
+    return rv;
 }
 
 MyString operator+(const MyString& lhs, const char* rhs) {
     // 实现+运算符(MyString + C风格字符串)
-    return MyString();
+    MyString rv(lhs);
+    rv.append(rhs);
+    return rv;
 }
 
 MyString operator+(const char* lhs, const MyString& rhs) {
     // 实现+运算符(C风格字符串 + MyString)
-    return MyString();
+    MyString rv(lhs);
+    rv.append(rhs);
+    return rv;
 }

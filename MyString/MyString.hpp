@@ -51,17 +51,11 @@ public:
     /* 流式运算符重载 */ 
     // 输出运算符重载（友元函数）
     friend std::ostream& operator<<(std::ostream& os, const MyString& str);
-
     // 输入运算符重载（友元函数）
     friend std::istream& operator>>(std::istream& is, MyString& str);
 
-    // 其他操作
-    MyString substr(size_t pos, size_t len) const;   // 返回子串
-    size_t find(char ch) const;                      // 查找字符
-    size_t find(const MyString& other) const;        // 查找字符串
-    void swap(MyString& other);                      // 交换字符串
-    const char* c_str() const { return data_; }      // 返回C风格字符串
-    void clear();                                    // 清空字符串
+    // 清空字符串
+    void clear();                                    
 
 };
 
