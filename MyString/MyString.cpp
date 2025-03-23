@@ -127,25 +127,22 @@ MyString& MyString::operator+=(const MyString& other) {
     return *this;
 }
 
-// 比较字符串
+/* 比较字符串重载 */ 
+// 实现相等比较
 bool MyString::operator==(const MyString& other) const {
-    // 实现相等比较
-    return false;
+    return strcmp(data_, other.data_) == 0;
 }
-
+// 实现不相等比较
 bool MyString::operator!=(const MyString& other) const {
-    // 实现不相等比较
-    return false;
+    return strcmp(data_, other.data_) != 0;
 }
-
+// 实现小于比较
 bool MyString::operator<(const MyString& other) const {
-    // 实现小于比较
-    return false;
+    return strcmp(data_, other.data_) < 0;
 }
-
+// 实现大于比较
 bool MyString::operator>(const MyString& other) const {
-    // 实现大于比较
-    return false;
+    return strcmp(data_, other.data_) > 0;
 }
 
 /* 流式运算符重载 */ 
